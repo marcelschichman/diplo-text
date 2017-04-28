@@ -27,7 +27,15 @@ Ukázalo sa, že pri chybovosti čítaní sekvenačného zariadenia PacBio RS II
 
 \paragraph{Rozširovanie jadier}
 
-Častokrát je súvislá zhoda medzi čítaniami na nejakom miste dlhšia ako $k$. Vtedy popísaný algoritmus nájde niekoľko po sebe idúcich, na $k - 1$ znakoch sa prekrývajúcich zhôd. Pre ďalšie spracovanie je výhodné spracovať tieto zhody ako jedno dlhšie jadro. Dosiahne sa to usporiadaním postupne podľa antidiagonály (rozdiel pozícií v čítaniach) a podľa pozície v niektorom z čítaní. Nadväzujúce jadrá sú po usporiadaní bezprostredne za sebou, čo umožní jednoduché spracovanie.
+Častokrát je súvislá zhoda medzi čítaniami na nejakom miste dlhšia ako $k$. Vtedy popísaný algoritmus nájde niekoľko po sebe idúcich, na $k - 1$ znakoch sa prekrývajúcich zhôd. Pre ďalšie spracovanie je výhodné spracovať tieto zhody ako jedno dlhšie jadro. Dosiahne sa to usporiadaním postupne podľa diagonály (rozdiel pozícií v čítaniach) a podľa pozície v niektorom z čítaní. Nadväzujúce jadrá sú po usporiadaní bezprostredne za sebou, čo umožní jednoduché spracovanie.
 
 \paragraph{Detekcia prekrývajúcich sa čítaní}
 
+To, že jadrá zarovnania majú mať podobné rozostupy na čítaniach, sa dá interpretovať aj tak, že ležia na blízkej diagonále. Pre danú pevnú šírku intervalu, chceme nájst jeho hranice tak, aby čo najviac jadier malo diagonálu vnútri intervalu. Tu využijeme, že jadrá sú stále usporiadané podľa diagonály. Algoritmus vyskúša umiestniť interval končiac postupne v každom jadre a zo všetkých možností vyberie tú, ktorej súčet dĺžok jadier s diagonálou v intervale je najväčší. Pri použití dvoch iterátorov je časová zložitosť lineárna vzhľadom na počet jadier. Na obrázku \ref{fig:diagonalovy_interval} sú červenou znázornené jadrá a modrý pás reprezentuje interval s najvačšim súčtom dĺžok jadier. Vhodnú veľkosť okna a minimálny súčet dĺžok jadier sme určili experimentálne.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/diagonalovy_interval.png}
+    \caption{Hľadanie intervalu s najvyšším počtom jadier}
+    \label{fig:diagonalovy_interval}
+\end{figure} 
