@@ -9,6 +9,8 @@
 \usepackage{verbatimbox}
 \usepackage{booktabs}
 \usepackage{subcaption}
+\usepackage{pdfpages}
+\usepackage{enumitem}
 \usepackage[slovak]{babel} % vypnite pre prace v anglictine
 \linespread{1.25} % hodnota 1.25 by mala zodpovedat 1.5 riadkovaniu
 
@@ -109,7 +111,8 @@ Fakulta matematiky, fyziky a informatiky
 % v elektronickej verzii sa zverejňuje zadanie bez podpisov
 
 \newpage 
-\thispagestyle{empty}
+% \thispagestyle{empty}
+\includepdf[pages={1}]{images/zadanie.pdf}
 
 % --- Koniec zadania
 
@@ -119,11 +122,11 @@ Fakulta matematiky, fyziky a informatiky
 %   Poďakovanie - nepovinné
 % -------------------
 \setcounter{page}{3}
-\newpage 
-~
+% \newpage 
+% ~
 
-\vfill
-{\bf Poďakovanie:}
+% \vfill
+% {\bf Poďakovanie:}
 
 % --- Koniec poďakovania
 

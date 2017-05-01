@@ -1,6 +1,13 @@
 \chapter{Náš algoritmus}
 
-V tejto kapitole popíšeme náš prístup k problému opravovania dlhých čitani. Algoritmus nepotrebuje doplňujúcu informáciu v podobne krátkych čitaní s nízkou chybovosťou. Dalšou základnou vlastnosťou algoritmu je, že sa úplne vyhne zarovnávaniu čítaní, ktoré je jeden z časovo najnáročnejších podproblémov štandardných metód korekcie. Najprv zadefinujeme pojem jadro korekcie, popíšeme ako jadrá získať a následne ako ich spracovať a použiť na korekciu čítaní.
+V tejto kapitole popíšeme náš prístup k problému opravovania dlhých čitani. Algoritmus nepotrebuje doplňujúcu informáciu v podobne krátkych čitaní s nízkou chybovosťou. Dalšou základnou vlastnosťou algoritmu je, že sa úplne vyhne zarovnávaniu čítaní, ktoré je jeden z časovo najnáročnejších podproblémov štandardných metód korekcie. 
+
+Celá korekcia v našom algoritme prebieha v týchto krokoch:
+\begin{enumerate}
+\item Získame informáciu o vzájomnom prekrytí čítaní v genóme
+\item Na čítaniach označíme úseky, ktoré sú s vysokou pravdepodobnosťou správne
+\item Čítanie s čo najväčšou zhodou vyskladáme zo správnych úsekov -- svojich a tých z prekrývajúcich sa čítaní
+\end{enumerate}
 
 \input jadra_korekcie.tex
 
