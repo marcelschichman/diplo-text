@@ -4,9 +4,42 @@ Táto časť sa bude venovať zostavovaniu opravovaného čítania z jadier kore
 
 \subsection{Hľadanie najlepšej cesty}
 
+Na hľadanie cesty medzi dvomi silnými jadrami s najnižsou editačnou vzdialenosťou od pôvodnej sekvencie používame Dijkstrov algoritmus. Priestor pozícií je kartézsky súčin pozícií na opravovanom čítaní, všetkých jadier a všetkých pozícií v rámci jadier. Hľadanie cesty začína na konci ľavého silného jadra a jeho zodpovedájúcej pozícii v čítaní. Algoritmus skončí na ktorejkoľvek pozícii pravého silného jadra, ak pozícia v rámci čítania súhlasí s pozíciou tohto jadrá na čítaní. To na ktorej pozícii v pravom jadre skončíme nijako neovplyvňuje editačnú vzdialenosť.
+
+V každkej iterácii Dijkstrovho algoritmu môže nastať jedna z možností:
+\begin{enumerate}[label={S.\arabic*}]
+\item \label{na_konci_jadra} Nachádzame sa na konci jadra (za poslednou bázou)
+\item \label{uprostred_jadra} Nachádzame sa niekde uprostred jadra
+\end{enumerate}
+
+V prípade \ref{na_konci_jadra} potrebujeme na predlženie generovanej cesty prejsť na iné jadro korekcie. Do prioritného radu Dijkstrovho algoritmu pridáme nové pozície podľa hrán v grafe jadier. Pozícia na čitaní sa nezmení a pozícia na jadre, na ktoré sme preskočili, závisí od dĺžky prekrytia jadier. Tútu informáciu máme uloženú spolu s hranou v grafe.
+
+V prípade \ref{uprostred_jadra} rozlišujeme podobne ako pri zarovnávaní sekvencií štyri možnosti:
+
+\begin{enumerate}[label={R.\arabic*}]
+\item \label{item:zhoda}        Zhoda -- ak na čítaní nasleduje rovnaká báza ako na jadre, algoritmus pridá do prioritného radu pozíciu o jednu bázu posunutú na čítani aj jadre. Editačná vzdialenosť tejto pozície je rovnaká, takže túto pozíciu pridáme akoby na začiatok radu.
+\item \label{item:inzercia}     Inzercia -- na tento druh chyby čítania sa pozeráme z pohľadu výslednej sekvencie. Ide o prípad, kedy je v čítaní báza navyše oproti sekvencii jadra. Algoritmus vytvorí pozíciu, ktorá je posunutá na čítaní oproti východzej pozícii, ale na jadre sa neposunie. 
+\item \label{item:delecia}      Delécia -- opačný prílad ako inzercia. Algoritmus sa posunie len na jadre.
+\item \label{item:substitucia}  Substitúcia -- kedže sekvenačne zariadenie niekedy urobí aj tento druh chyby, dovolíme aj nášmu algoritmu ''zarovnať'' na seba rôzne bázy. Postup je podobný ako pri zhode, ale editačná vzdialenosť novej pozície je penalizovaná.
+\end{enumerate}
+
+Ak nastane zhoda, môžeme v snahe minimalizovať zbytočné vetvy výpočtu nebrať do úvahy ostatné možnosti. Dá sa nahliadnuť, že pri rozumných nastaveniach penalizácie toto obmedzenie nijako nezhorší editačnú vzdialenosť nájdenej cesty. Podobné orezanie vetiev sa dá urobiť pri prechádzaní z jedného jadra na druhé. Ak z jadra smeruje hrana s prekrytím $k - 1$ a pridaná báza sa zhoduje s bázou, ktorá nasleduje na čítaní, ostatné hrany nepoužijeme. Toto zrýchlenie za istých okolností môže negatívne ovplyvniť výsledok. V nasledujúcej kapitole otestujeme ako vplýva na kvalitu výsledného zarovnania a rýchlosť výpočtu.
+
+\subsubsection{Penalizácia}
+
+Penalizácia v našom algoritme je analógiou skórovacieho systému pri zarovnávaní sekvencií. Penalty sa používajú ako vzdialenosti medzi pozíciami v priestore pozícií Dijkstrovho algoritmu. Programu je možné nastaviť rôzne penalty pre inzerciu, deléciu a substitúciu. Chyby vznikajúce sekvenáciou zariadením PacBio RS II sú prevažne inzercie a preto je vhodné tento druh chyby penalizovať menej ako ostatné. Vplyv rozdielu penalizácie medzi inzerciou a ostatnými otestujeme v nasledujúcej kapitole. 
+
+Penalizáciu vieme využiť aj na dosiahnutie čo najvačších prekrytí po sebe idúcich jadier v hľadanej ceste. Krátke prekrytia sú nebezpečné, lebo vo vačšine prípadov vznikli náhodou a umožnia tak vytvoriť nesprávne sekvencie. Ak dosiahneme vysoké priemerné prekrytie jadier, jednotlivé bázy budu ležať na viacerých jadrách, čo zvyšuje ich dôveryhodnosť. Pri prechádzaní z jadra na iné jadro preto algoritmus udeľuje penaltu vo výške danej nejakou funkciou s parametrom veľkosti prekrytia. Vyskúšali sme použiť lineárne aj kvadratické funkcie.
+
+Pri vytváraní grafu jadier sme obmedzili očakávanú vzdialenosť medzi prepojenými jadrami. Avšak, viacero nešťastných krokov po sebe môže spôsobiť, že jadro korekcie použijeme niekde úplne inde, ako by sa malo nachádzať. Podobne ako s veľkosťami prekrytí vieme toto zlé umiestnenie penalizovať. Treba však zobrať do úvahy, že pozície jadier sú len odhadované a malé rozdiely nič neznamenajú. Nastavíme preto pevnú hranicu, a ak su vzdialenosť použitia jadra na čítaní od očakávanej pozície prekročí, udelí sa za to konštantná penalizácia.
+
 \subsection{Heuristiky}
 
+V nasledujúcom texte popíšeme heuristické metódy na urýchlenie procesu hľadania ciest medzi silnými jadrami. Cieľom je zamedziť prehľadávanie vetiev, ktoré sú s vysokou pravdepodobnosťou nesprávne. Celý prehľadávaný priestor má $|r||V|k$ pozícií, kde $|r|$ je dĺžka úseku čítania medzi dvomi jadrami korekcie, $|V|$ je počet jadier a $k$ je dĺžka jadier. Úlohou heuristík je znížiť počet prehľadaných stavov na čo najmenší násobok $|r|$, a teda aby bol čas výpočtu lineárne závislý len od dĺžky úseku.
+
 \subsubsection{Lokálna kvalita cesty}
+
+Táto metóda je inšpirovaná nástrojom DALIGN. 
 
 \subsubsection{Vzdialenosť od najlepšej cesty}
 

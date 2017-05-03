@@ -1,3 +1,17 @@
 \chapter{Experimenty}
 
-Tu budú popísané experimenty.
+V predchádzajúcej kapitole sme uviedli množstvo parametrov, ktoré ovplyvňujú rôzne časti nášho algoritmu. Ich hodnoty sa nedajú nijako vypočítať, ale vieme ich určiť rozumné hranice a následne experimentálne vybrať tú najlepšiu možnosť. Získané hodnoty parametrov potom použijeme na porovnanie nášho algoritmu s nástrojom LoRMA
+
+\section{Jadrá korekcie}
+
+V tejto časti uvedieme výsledky, ako vplývajú parametre hľadania jadier zarovnania na ich kvalitu a na pokrytie čítania jadrami. Kedže upravené čítania sú reťazce pospájaných jadier korekcie, pokrytie čítania jadrami je nutná podmienka pre fungovanie korekcie. Na druhej strane príliš voľné podmienky spôsobia, že vysoký počet falošných jadier zarovnania bude výrazne predlžovať výpočet.
+
+Detekciu jadier korekcie ovplyvňujú tieto parametre:
+
+\begin{enumerate}
+\item Minimálna dĺžka zhody medzi čítaniami
+\item Minimálny súčet dĺžok zhôd medzi prekrývajúcimi sa čítaniami (absolútny člen funkcie)
+\item Podiel dĺžky prekrytia, ktorý pripočítavame k minimálnemu súčtu dĺzok (lineárny člen funkcie)
+\end{enumerate}
+
+Pri rôznych kombináciách týchto parametrov pozorujeme, ako sa mení čas výpočtu a kvalita výslednej sekvencie. Kvalitu posudzujeme zarovnávaním sekvencií na genóm pomocou nástroja BLASR. 
