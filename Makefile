@@ -7,9 +7,9 @@ main.pdf: main.tex *.tex *.bib images/*
 	pdflatex main
 
 clean:
-	rm main.pdf
-	rm *.bbl
-	rm *.blg
-	rm *.toc
-	rm *.aux
-	rm *.log
+	rm main.pdf -f
+	rm *.bbl -f
+	rm *.blg -f
+	rm *.toc -f
+	rm *.aux -f
+	rm *.log -f

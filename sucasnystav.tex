@@ -4,7 +4,7 @@ V tejto kapitole popíšeme základné problémy a algoritmy potrebné pri rieš
 
 \section{Sekvenácia}
 
-DNA sekvencie sú kľúčové dáta v oblasti bioinformatiky. Proces ich získavania je predmetom výskumu už od 70. rokov 20. storočia. V tejto práci budeme opravovať čítania DNA získané sekvenovacím zariadením PacBio RS II. Tieto čítania sa vyznačujú tým, že sú výrazne dlhšie (až do 14 tisíc báz) ako čítania starších sekvenovacích zariadeni (menej ako 1000). Nevýhodou je výrazne vyššia chybovosť, ktora sa pohybuje na úrovni 14\%.
+DNA sekvencie sú kľúčové dáta v oblasti bioinformatiky. Proces ich získavania je predmetom výskumu už od 70. rokov 20. storočia. V tejto práci budeme opravovať čítania DNA získané sekvenovacím zariadením PacBio RS II \citep{Rhoads2015278}. Tieto čítania sa vyznačujú tým, že sú výrazne dlhšie (až do 14 tisíc báz) ako čítania starších sekvenovacích zariadeni (menej ako 1000). Nevýhodou je výrazne vyššia chybovosť, ktora sa pohybuje na úrovni 14\%.
 
 \section{Zarovnávanie čítaní}
 
@@ -166,7 +166,7 @@ Algoritmus skončí, ak dôjde na okraj editačného grafu alebo, ak už žiaden
 
 \section{Korekcia čítaní}
 
-Zvýšený výskit chýb sa pri sekvenovaní zariadením PacBio RS II kompenzuje vysokým pokrytím genómu čítaniami. To nám umožní chyby s vysokou úspešnosťou nájsť a opraviť. Opravené čítania sa potom oveľa lepšie použivajú pri ďalšom spracovaní (napríklad rekonštrukcii genómu). Štandardný prístup k tomuto problému je vytvoriť viacnásobné zarovnanie nad opravovaným čítaním z čítaní, ktoré sa s ním prekrývajú. Následne sa pre jednotlivé pozeráme na jednotlivé stĺpce a vyberáme najčastejšie hodnoty. V skutočnosti je to trochu komplikovanejšie, keďže algoritmus sa musí vysporiadať s inzerciami a deléciami na referenčnom čítaní aj na pomocných čítaniach.
+Zvýšený výskit chýb sa pri sekvenovaní zariadením PacBio RS II kompenzuje vysokým pokrytím genómu čítaniami. To nám umožní chyby s vysokou úspešnosťou nájsť a opraviť. Opravené čítania sa potom oveľa lepšie použivajú pri ďalšom spracovaní (napríklad rekonštrukcii genómu) \citep[Koren071282]. Štandardný prístup k tomuto problému je vytvoriť viacnásobné zarovnanie nad opravovaným čítaním z čítaní, ktoré sa s ním prekrývajú. Následne sa pre jednotlivé pozeráme na jednotlivé stĺpce a vyberáme najčastejšie hodnoty. V skutočnosti je to trochu komplikovanejšie, keďže algoritmus sa musí vysporiadať s inzerciami a deléciami na referenčnom čítaní aj na pomocných čítaniach.
 
 \subsection{FalconSense}
 
@@ -293,13 +293,10 @@ Ukážka dvojíc začiatkov a koncov je na obrázku \ref{fig:weakstrongregions}.
 
 Keďže problém prvého a posledného regiónu je symetrický, popíšem len spôsob korekcie toho posledného. Tento región začína jednou silnou $k$-ticou, za ktorou nasleduje región slabých $k$-tic. Na rozdiel od vnútorných regiónov tu nemáme koncovú $k$-ticu, ktorá by jasne ohraničila hľadanú cestu. Prehľadávaním do hĺbky hľadá cestu opravujúcu čo najdlhší prefix koncového regiónu s čo najmenšou editačnou vzdialenosťou. Optimalizácia týchto dvoch parametrov vedie k tomu, že nájdená cesta bude predĺžená o úsek s nižšiou koreláciou so zodpovedajúcim úsekom chybového čítania. Tento problém odstránime prezarovnaním nájdenej cesty so zodpovedajúcim prefixom a následným skrátením po miesto, kde má zarovnanie najvyššie skóre.
 
+\subsection{LoRDEC* + LoRMA}
 
+V článku \citep{salmela2016accurate} je popísané ako využiť nástroj LoRDEC na samoopravovanie čítaní, t.j. bez pomocných čítaní. 
 
+Namiesto pomocných čítaní sa de Bruijnov graf zostrojí z $k$-tic, ktoré sa v množine vyskitujú aspoň $h$ krát. Nástroj LoRDEC sa takto spustí viac krát, a vstupom každej ďalšej iterácie je výstup tej predchádzajúcej. Pri každej iterácií sa použije vyššia hodnota $k$.
 
-
-
-
-
-
-
-
+Na výstup poslednej iterácie sa použije nástroj LoRMA. Ten pre každú sekvenciu nájde množinu najpodobnejších sekvencií $Q$. Finálna korekcia sa urobí na základe viacnásobného zarovnania $Q$ a opravovaného čítania.

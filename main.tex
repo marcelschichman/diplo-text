@@ -11,6 +11,7 @@
 \usepackage{subcaption}
 \usepackage{pdfpages}
 \usepackage{enumitem}
+\usepackage{float}
 \usepackage[slovak]{babel} % vypnite pre prace v anglictine
 \linespread{1.25} % hodnota 1.25 by mala zodpovedat 1.5 riadkovaniu
 
@@ -18,7 +19,7 @@
 % --- Definicia zakladnych pojmov
 % --- Vyplnte podla vasho zadania
 % -------------------
-\def\mfrok{2016}
+\def\mfrok{2017}
 \def\mfnazov{Korekcia dlhých čítaní s vysokým počtom chýb}
 \def\mftyp{Diplomová práca}
 \def\mfautor{Marcel Schichman}
@@ -136,13 +137,9 @@ Konzultant: & \mfkonzultant \\
 \newpage 
 \section*{Abstrakt}
 
+Táto práca sa venuje návrhu a implementácii algoritmu na korekciu čítaní DNA zo sekvenačných zariadení 3. generácie bez využitia zarovnávania sekvencií. Funguje na princípe skladania krátkych úsekov čítaní, ktoré považuje za správne. Na dosiahnutie čo najlepších výsledkov sme naimplementovali a otestovali viacero heuristických metód. 
 
-Slovenský abstrakt v rozsahu 100-500 slov, jeden odstavec. Abstrakt
-stručne sumarizuje výsledky práce. Mal by byť pochopiteľný pre bežného
-informatika. Nemal by teda využívať skratky, termíny alebo označenie
-zavedené v práci, okrem tých, ktoré sú všeobecne známe.
-
-\paragraph*{Kľúčové slová:} jedno, druhé, tretie (prípadne štvrté, piate)
+\paragraph*{Kľúčové slová:} DNA, sekvenácia, korekcia, PacBio, heuristiky
 % --- Koniec Abstrakt - Slovensky
 
 
@@ -152,11 +149,9 @@ zavedené v práci, okrem tých, ktoré sú všeobecne známe.
 \newpage 
 \section*{Abstract}
 
-Abstract in the English language (translation of the abstract in the
-Slovak language).
+This thesis describes a design and implementation of a new correcting algorithm of DNA reads. The algorithm specializes on reads from  $3^{rd}$ generation sequencing technologies. It detects short correct sequences and then use them to reconstruct the reads. To get the best results possible we implement and test multiple heuristic techniques.
 
-
-\paragraph*{Keywords:} 
+\paragraph*{Keywords:} DNA, sequencing, correction, PacBio, heuristic techniques
 
 % --- Koniec Abstrakt - Anglicky
 

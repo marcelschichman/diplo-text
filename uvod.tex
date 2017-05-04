@@ -1,4 +1,6 @@
 \chapter*{Úvod}
 \addcontentsline{toc}{chapter}{Úvod}
 
-Tu bude úvod.
+Príchodom sekvenačných zariadení 3. generácie, ktorých výstupné dáta majú chybovosť okolo 14\%, vznikla potreba navrhnúť algoritmy na ich korekciu. Dovtedy používané nástroje boli stavané na oveľa kratšie čítania s chybovosťou na úrovni približne 1\%. Na korekciu čítaní s vysokou chybovosťou v súčasnosti existuje viacero nástrojov. Väčšina z nich využíva na korekciu časovo náročne viacnásobné zarovnania. Prvú skupinu tvoria nástroje vykonávajúce takzvanú hybridnú korekciu -- využívajú krátke čítania zo sekvenačných zariadení 2. generácie s nízkou chybovosťou. Na druhej strane existujú aj nástroje, ktoré pomocné čítania nepotrebujú ako napríklad nástroj LoRMA \citep{salmela2016accurate}. Táto diplomová práca popisuje návrh a implementáciu nástroja na korekciu čítaní, bez použitia krátkych pomocných čítaní. Náš algoritmus sa na rozdiel od väčšiny ostatných nástrojov vyhne zarovnávaniu sekvencií. Namiesto toho hľadá v čítaniach správne úseky a z tých potom skladá výstupné sekvencie.
+
+V prvej kapitole sú vysvetlené základne pojmy a metódy použivané pri korekcii čítaní. V kapitole Náš algoritmus je presne popísaný princíp a implementácia nášho algoritmu a heuristickych metód ktoré sme použili. Experimenty s parametrami nástroja a porovnanie s nástrojom LoRMA je zhrnuté v poslednej kapitole.
